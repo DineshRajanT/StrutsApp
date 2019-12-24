@@ -1,0 +1,74 @@
+	
+ create view fidMatch as select events.EVENT_ID,features.PRIORITY from events INNER JOIN features ON features.FEATURE_ID =events.FEATURE_ID;
+
+
+
+create view eidMatch as select events.EVENT_ID,feeds.FEED_ID from events INNER JOIN feeds ON events.EVENT_ID =feeds.EVENT_ID;
+
+ create view sortfeeds as select eidMatch.FEED_ID from eidMatch INNER JOIN fidMatch ON eidMatch.EVENT_ID=fidMatch.EVENT_ID order by fidMatch.PRIORITY ASC;
+
+
+
+
+
+
+zac-si-184@zac-si-184:~/Documents/apache-tomcat-8.5.41/webapps/new_notify/src/raj$ sudo javac -cp .:/home/zac-si-184/Documents/apache-tomcat-8.5.41/webapps/new_notify/WEB-INF/lib/* -d /home/zac-si-184/Documents/apache-tomcat-8.5.41/webapps/new_notify/WEB-INF/classes/ *.java 
+
+
+
+
+private static UpdateTime instance;
+	    private UpdateTime(){
+
+       //Private Constructor
+    			}
+	
+	    public synchronized static UpdateTime getInstance()
+
+    	{
+           if (instance==null)
+           {
+              instance = new UpdateTime();
+
+              System.out.println("UpdateTime Class Object creatred...!!!");
+           }
+          else{
+              System.out.println("UpdateTime Class Object not Creatred just returned Created one...!!!");
+          }
+              return instance;
+       }
+   
+
+
+background="/new_notify/sample.jpeg"
+
+
+
+feature:
+create table feature(FEATURE_ID bigint primary key auto_increment,FEATURE_NAME varchar(45) unique ,DURATION bigint);
+
+
+events:
+create table events(EID int primary key auto_increment,EVENT varchar(45),FID int,MID int, FOREIGN kEY(FID) REFERENCES feature(FID), FOREIGN kEY(MID) REFERENCES notification_mode(MID));
+
+
+notification_mode:
+create table notification_mode(MID int primary key auto_increment,MODE varchar(34));
+
+
+<%@ page import="java.sql.*; "%>
+
+
+
+create table events(EVENT_ID bigint primary key auto_increment,EVENT varchar(45),FEATURE_ID bigint,MODE_ID bigint,STATUS boolean DEFAULT 1,MAIL varchar(34), FOREIGN kEY(FEATURE_ID) REFERENCES feature(FEATURE_ID), FOREIGN kEY(MODE_ID) REFERENCES notification_mode(MODE_ID))
+
+
+
+create table events(EVENT_ID bigint primary key auto_increment,EVENT varchar(45),FEATURE_ID bigint,MODE_ID bigint,STATUS boolean DEFAULT 1,MAIL varchar(34), FOREIGN kEY(FEATURE_ID) REFERENCES feature(FEATURE_ID), FOREIGN kEY(MODE_ID) REFERENCES notification_mode(MODE_ID));
+
+
+create table notification_mode(MODE_ID bigint primary key auto_increment,MODE varchar(34) unique);
+
+
+
+select events.MAIL from events INNER JOIN notification_mode ON events.MODE_ID=notification_mode.MODE_ID AND notification_mode.MODE='mail' ;
